@@ -21,10 +21,14 @@ source ./scripts/build.sh
 function run_test_suite() {
   echo "Test suite "$(basename $1)":"
 
-  TEST_CASES=$(ls -d $1/t*)
-  for CASE in $TEST_CASES; do
-    echo "    "$(basename $CASE)
-  done
+  if [ -f "$1/t*" ]; then
+    TEST_CASES=$(ls -d -f $1/t*)
+    for CASE in $TEST_CASES; do
+      echo "    "$(basename $CASE)
+    done
+  else
+    echo "  There is no tests here"
+  fi
 
   echo
 }
