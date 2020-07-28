@@ -8,7 +8,6 @@ function build() {
 
   # Run the Makefile
   ROOT_DIR=$(echo $PWD)
-  BIN_NAME="pathfinder"
 
   cd ../src/
   make

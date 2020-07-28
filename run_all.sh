@@ -27,6 +27,8 @@ source ./scripts/helpers.sh
 ## Check there are no unavailable functions used
 #AVAILABLE_FUNCTIONS=(open write)
 
+BIN_NAME="pathfinder"
+
 # ================================== BUILD ====================================
 source ./scripts/build.sh
 #build

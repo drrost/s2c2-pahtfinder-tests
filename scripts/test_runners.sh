@@ -3,17 +3,27 @@
 # Created by Rostyslav Druzhchenko on 28.07.2020.
 #
 
+TEST_FAILED=0
+
 function run_test_suite() {
   echo "Test suite "$(basename $1)":"
 
-  if [ -f "$1/t*" ]; then
-    TEST_CASES=$(ls -d -f $1/t*)
+#  if [ -f "$1/t*" ]; then
+    TEST_CASES=$(ls -f $1/t*)
     for CASE in $TEST_CASES; do
-      echo "    "$(basename $CASE)
+      cp $PWD/$BIN_NAME $(dirname $CASE)
+      $CASE $BIN_NAME
+      printf "    "$(basename $CASE)" | "
+      if [[ $TEST_FAILED -eq 0 ]]; then
+        tl_print_success "OK"
+      else
+        tl_print_error "FAILED"
+      fi
+      rm -f $(dirname $CASE)/$BIN_NAME
     done
-  else
-    echo "  There are no tests here"
-  fi
+#  else
+#    echo "  There are no tests here"
+#  fi
 
   echo
 }
