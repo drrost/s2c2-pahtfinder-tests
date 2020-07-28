@@ -18,33 +18,45 @@ source ./scripts/build.sh
 
 # ================================== TEST =====================================
 
-function run_test_suit() {
-  echo "Running a test suit: \""$1"\""
+function run_test_suite() {
+  echo "Test suite "$(basename $1)":"
+
+  TEST_CASES=$(ls -d $1/t*)
+  for CASE in $TEST_CASES; do
+    echo "    "$(basename $CASE)
+  done
+
+  echo
 }
 
 function run_test_run() {
-    if [ "$#" -ne 1 ]; then
-      echo "usage: run_test_run [test run full path]"
-    fi
+  if [ "$#" -ne 1 ]; then
+    echo "usage: run_test_run [test run full path]"
+  fi
+
+  print_delim "="
 
   echo "TEST RUN:" $(basename $1)
-  print_delim
+  print_delim "-"
+  echo
+
+  TEST_SUITES=$(ls -d $1/ts*)
+  for SUITE in $TEST_SUITES; do
+    run_test_suite $SUITE
+  done
+  print_delim "="
+  echo
 }
 
-TEST_RUNS=$(ls -d $PWD/tests/tr*/)
+TEST_RUNS=$(ls -d $PWD/tests/tr*)
 print_title "Run all the tests"
+echo
+
 for RUN in $TEST_RUNS; do
   run_test_run $RUN
 done
 
 exit
-
-TEST_FOLDERS=$(ls -d tests/ts_*/)
-
-# Run all the tests
-for FOLDER in $TEST_FOLDERS; do
-  run_test_suit $FOLDER
-done
 
 # ================================== CLEAN ====================================
 

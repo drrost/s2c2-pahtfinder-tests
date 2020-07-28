@@ -11,9 +11,15 @@ function echo_n() {
 }
 
 function print_delim() {
-  echo_n '-' 80
+  delim='-'
+  if [ "$#" -ne 0 ]; then
+    delim=$1
+  fi
+
+  echo_n $delim 80
   printf '\n'
 }
+
 
 function print_title() {
   # Check parameters
