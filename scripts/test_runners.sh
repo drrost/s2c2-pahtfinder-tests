@@ -11,7 +11,9 @@ function run_test_suite() {
 #  if [ -f "$1/t*" ]; then
     TEST_CASES=$(ls -f $1/t*)
     for CASE in $TEST_CASES; do
-      cp $PWD/$BIN_NAME $(dirname $CASE)
+      CASE_DIR=$(dirname $CASE)
+      cp $PWD/$BIN_NAME $CASE_DIR
+      cd $CASE_DIR
       $CASE $BIN_NAME
       printf "    "$(basename $CASE)" | "
       if [[ $TEST_FAILED -eq 0 ]]; then
@@ -19,7 +21,8 @@ function run_test_suite() {
       else
         tl_print_error "FAILED"
       fi
-      rm -f $(dirname $CASE)/$BIN_NAME
+      rm -f $CASE_DIR/$BIN_NAME
+      cd ../../..
     done
 #  else
 #    echo "  There are no tests here"
