@@ -37,3 +37,30 @@ function print_title() {
   fi
   printf '\n'
 }
+
+# =============================================================================
+# Colored output
+#
+function tl_print_error() {
+  # Check parameters
+  if [ "$#" -ne 1 ]; then
+    echo "usage: ./tl_print_error [message]"
+    return 1
+  fi
+
+  RED='\033[0;31m'
+  NC='\033[0m'
+  printf "${RED}${1}${NC}\n"
+}
+
+function tl_print_success() {
+  # Check parameters
+  if [ "$#" -ne 1 ]; then
+    echo "usage: ./tl_print_success [message]"
+    return 1
+  fi
+
+  GREEN='\033[0;32m'
+  NC='\033[0m'
+  printf "${GREEN}${1}${NC}\n"
+}

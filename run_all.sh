@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/helpers.sh
+
 ## Check mandatory files/folders exist
 #MANDATORY_FILES="src/ inc/ inc/libmx.h Makefile"
 #PATH_TO_SRC='../src/'
@@ -11,29 +13,28 @@
 #AVAILABLE_FUNCTIONS=(open write)
 
 # ================================== BUILD ====================================
-
-# Run the Makefile
-ROOT_DIR=$(echo $PWD)
-BIN_NAME="pathfinder"
-
-cd ../src/
-make
-mv ./$BIN_NAME $ROOT_DIR/
-make clean
-cd $ROOT_DIR
+source ./scripts/build.sh
+#build
 
 # ================================== TEST =====================================
-source ./scripts/helpers.sh
 
 function run_test_suit() {
-  echo "Running test suit: \""$1"\""
+  echo "Running a test suit: \""$1"\""
 }
 
-TEST_RUNS=$(ls -d tests/tr*/)
+function run_test_run() {
+    if [ "$#" -ne 1 ]; then
+      echo "usage: run_test_run [test run full path]"
+    fi
+
+  echo "TEST RUN:" $(basename $1)
+  print_delim
+}
+
+TEST_RUNS=$(ls -d $PWD/tests/tr*/)
 print_title "Run all the tests"
 for RUN in $TEST_RUNS; do
-  echo "TEST RUN:" $(basename $RUN)
-  print_delim
+  run_test_run $RUN
 done
 
 exit
