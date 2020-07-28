@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Created by Rostyslav Druzhchenko on 28.07.2020.
+#
 
 function build() {
   print_title "Run BUILD"

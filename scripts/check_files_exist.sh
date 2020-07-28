@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Created by Rostyslav Druzhchenko on 28.07.2020.
+#
 
 # Check mandatory files/folders exist
 MANDATORY_FILES=($2)

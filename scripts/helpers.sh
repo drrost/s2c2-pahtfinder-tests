@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Created by Rostyslav Druzhchenko on 28.07.2020.
+#
 
 function echo_n() {
   if [ "$#" -ne 2 ]; then

@@ -1,4 +1,19 @@
 #!/bin/bash
+#
+# Created by Rostyslav Druzhchenko on 28.07.2020.
+#
+# NAME
+#     run_all -- Runs all the available test runs.
+#
+# SYNOPSIS
+#     ./run_all.sh [trXX]
+#
+# DESCRIPTION
+#    Runs all available test runs recursively.
+#
+#    trXX - a specific test run. If this there is no this option there, runs
+#           all the available test runs.
+#
 
 source ./scripts/helpers.sh
 
@@ -17,47 +32,16 @@ source ./scripts/build.sh
 #build
 
 # ================================== TEST =====================================
-
-function run_test_suite() {
-  echo "Test suite "$(basename $1)":"
-
-  if [ -f "$1/t*" ]; then
-    TEST_CASES=$(ls -d -f $1/t*)
-    for CASE in $TEST_CASES; do
-      echo "    "$(basename $CASE)
-    done
-  else
-    echo "  There is no tests here"
-  fi
-
-  echo
-}
-
-function run_test_run() {
-  if [ "$#" -ne 1 ]; then
-    echo "usage: run_test_run [test run full path]"
-  fi
-
-  print_delim "="
-
-  echo "TEST RUN:" $(basename $1)
-  print_delim "-"
-  echo
-
-  TEST_SUITES=$(ls -d $1/ts*)
-  for SUITE in $TEST_SUITES; do
-    run_test_suite $SUITE
-  done
-  print_delim "="
-  echo
-}
+source ./scripts/test_runners.sh
 
 TEST_RUNS=$(ls -d $PWD/tests/tr*)
 print_title "Run all the tests"
 echo
 
 for RUN in $TEST_RUNS; do
-  run_test_run $RUN
+  if [[ $(basename $RUN) == $1* ]]; then
+    run_test_run $RUN
+  fi
 done
 
 exit
