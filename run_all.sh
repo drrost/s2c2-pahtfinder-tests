@@ -31,7 +31,7 @@ BIN_NAME="pathfinder"
 
 # ================================== BUILD ====================================
 source ./scripts/build.sh
-#build
+build
 
 # ================================== TEST =====================================
 source ./scripts/test_runners.sh
@@ -45,8 +45,6 @@ for RUN in $TEST_RUNS; do
     run_test_run $RUN
   fi
 done
-
-exit
 
 # ================================== CLEAN ====================================
 
