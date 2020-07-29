@@ -3,8 +3,6 @@
 # Created by Rostyslav Druzhchenko on 28.07.2020.
 #
 
-TEST_FAILED=0
-
 function run_test_suite() {
   echo "Test suite "$(basename $1)":"
 
