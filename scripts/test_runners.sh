@@ -6,25 +6,28 @@
 function run_test_suite() {
   echo "Test suite "$(basename $1)":"
 
-#  if [ -f "$1/t*" ]; then
-    TEST_CASES=$(ls -f $1/t*)
-    for CASE in $TEST_CASES; do
-      CASE_DIR=$(dirname $CASE)
-      cp $PWD/$BIN_NAME $CASE_DIR
-      cd $CASE_DIR
-      $CASE $BIN_NAME
-      printf "    "$(basename $CASE)" | "
-      if [[ $TEST_FAILED -eq 0 ]]; then
-        tl_print_success "OK"
-      else
-        tl_print_error "FAILED"
-      fi
-      rm -f $CASE_DIR/$BIN_NAME
-      cd ../../..
-    done
-#  else
-#    echo "  There are no tests here"
-#  fi
+  TEST_CASES=$(ls -f $1/t*)
+  for CASE in $TEST_CASES; do
+    CASE_DIR=$(dirname $CASE)
+    cp $PWD/$BIN_NAME $CASE_DIR
+    cd $CASE_DIR
+    #      RES="$($CASE $BIN_NAME)"
+    RES="$($CASE $BIN_NAME)"
+    TEST_FAILED=$?
+    printf " --- "$(basename $CASE)" | "
+    if [[ $TEST_FAILED -eq 0 ]]; then
+      tl_print_success "OK"
+    else
+      tl_print_error "FAILED"
+      echo "$RES" >failed.txt
+      while IFS= read -r line; do
+        echo "      $line"
+      done <"failed.txt"
+      rm failed.txt
+    fi
+    rm -f $CASE_DIR/$BIN_NAME
+    cd ../../..
+  done
 
   echo
 }
