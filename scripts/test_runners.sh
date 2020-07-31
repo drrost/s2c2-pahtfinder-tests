@@ -3,34 +3,10 @@
 # Created by Rostyslav Druzhchenko on 28.07.2020.
 #
 
-function run_test_suite() {
-  echo "Test suite "$(basename $1)":"
+declare function print_fail
+declare function run_test_suite
 
-  TEST_CASES=$(ls -f $1/t*)
-  for CASE in $TEST_CASES; do
-    CASE_DIR=$(dirname $CASE)
-    cp $PWD/$BIN_NAME $CASE_DIR
-    cd $CASE_DIR
-    #      RES="$($CASE $BIN_NAME)"
-    RES="$($CASE $BIN_NAME)"
-    TEST_FAILED=$?
-    printf " --- "$(basename $CASE)" | "
-    if [[ $TEST_FAILED -eq 0 ]]; then
-      tl_print_success "OK"
-    else
-      tl_print_error "FAILED"
-      echo "$RES" >failed.txt
-      while IFS= read -r line; do
-        echo "      $line"
-      done <"failed.txt"
-      rm failed.txt
-    fi
-    rm -f $CASE_DIR/$BIN_NAME
-    cd ../../..
-  done
-
-  echo
-}
+# ================================= Main ======================================
 
 function run_test_run() {
   if [ "$#" -ne 1 ]; then
@@ -49,4 +25,38 @@ function run_test_run() {
   done
   print_delim "="
   echo
+}
+
+function run_test_suite() {
+  echo "Test suite "$(basename $1)":"
+
+  TEST_CASES=$(ls -f $1/t*)
+  for CASE in $TEST_CASES; do
+    CASE_DIR=$(dirname $CASE)
+    cp $PWD/$BIN_NAME $CASE_DIR
+    cd $CASE_DIR
+    RES="$($CASE $BIN_NAME)"
+    TEST_FAILED=$?
+    printf " --- "$(basename $CASE)" | "
+    if [[ $TEST_FAILED -eq 0 ]]; then
+      tl_print_success "OK"
+    else
+      print_fail "$RES"
+    fi
+    rm -f $CASE_DIR/$BIN_NAME
+    cd ../../..
+  done
+
+  echo
+}
+
+# =============================== Helpers =====================================
+
+function print_fail() {
+  tl_print_error "FAILED"
+  echo "$1" > failed.txt
+  while IFS= read -r line; do
+    echo "      $line"
+  done < "failed.txt"
+  rm failed.txt
 }
