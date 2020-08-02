@@ -36,15 +36,36 @@ build
 # ================================== TEST =====================================
 source ./scripts/test_runners.sh
 
-TEST_RUNS=$(ls -d $PWD/tests/tr*)
-print_title "Run all the tests"
-echo
+# Run all the tests
+#
+if [[ $# -eq 0 ]]; then
+  TEST_RUNS=$(ls -d $PWD/tests/tr*)
+  print_title "Run all the tests"
+  echo
+  for RUN in $TEST_RUNS; do
+    if [[ $(basename $RUN) == $1* ]]; then
+      run_test_run $RUN
+    fi
+  done
+  exit
+fi
 
-for RUN in $TEST_RUNS; do
-  if [[ $(basename $RUN) == $1* ]]; then
-    run_test_run $RUN
-  fi
-done
+KIND=$(basename $1)
+TO_RUN=$PWD/tests/$1
+RUNABLE_NAME="\"$(basename $TO_RUN)\""
+
+if [[ $KIND == tr* ]]; then
+  print_title "Run test run $RUNABLE_NAME" && echo
+  run_test_run $TO_RUN
+elif [[ $KIND == ts* ]]; then
+  print_title "Run test suite $RUNABLE_NAME" && echo
+  run_test_suite $TO_RUN
+elif [[ $KIND == t* ]]; then
+  print_title "Run test case $RUNABLE_NAME" && echo
+  run_test_case $TO_RUN
+else
+  echo "Unknown executable: \"$TO_RUN\""
+fi
 
 # ================================== CLEAN ====================================
 
