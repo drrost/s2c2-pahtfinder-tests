@@ -42,18 +42,18 @@ function run_test_suite() {
 function run_test_case() {
   CASE=$1
   CASE_DIR=$(dirname $CASE)
-    cp $PWD/$BIN_NAME $CASE_DIR
-    cd $CASE_DIR
-    RES="$($CASE $BIN_NAME)"
-    TEST_FAILED=$?
-    printf " --- "$(basename $CASE)" | "
-    if [[ $TEST_FAILED -eq 0 ]]; then
-      tl_print_success "OK"
-    else
-      print_fail "$RES"
-    fi
-    rm -f $CASE_DIR/$BIN_NAME
-    cd ../../..
+  cp $PWD/$BIN_NAME $CASE_DIR
+  cd $CASE_DIR
+  RES="$($CASE $BIN_NAME)"
+  TEST_FAILED=$?
+  printf " --- "$(basename $CASE)" | "
+  if [[ $TEST_FAILED -eq 0 ]]; then
+    tl_print_success "OK"
+  else
+    print_fail "$RES"
+  fi
+  rm -f $CASE_DIR/$BIN_NAME
+  cd ../../..
 }
 
 # =============================== Helpers =====================================
