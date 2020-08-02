@@ -5,6 +5,7 @@
 
 declare function print_fail
 declare function run_test_suite
+declare function run_test_case
 
 # ================================= Main ======================================
 
@@ -32,7 +33,15 @@ function run_test_suite() {
 
   TEST_CASES=$(ls -f $1/t*)
   for CASE in $TEST_CASES; do
-    CASE_DIR=$(dirname $CASE)
+    run_test_case $CASE
+  done
+
+  echo
+}
+
+function run_test_case() {
+  CASE=$1
+  CASE_DIR=$(dirname $CASE)
     cp $PWD/$BIN_NAME $CASE_DIR
     cd $CASE_DIR
     RES="$($CASE $BIN_NAME)"
@@ -45,18 +54,15 @@ function run_test_suite() {
     fi
     rm -f $CASE_DIR/$BIN_NAME
     cd ../../..
-  done
-
-  echo
 }
 
 # =============================== Helpers =====================================
 
 function print_fail() {
   tl_print_error "FAILED"
-  echo "$1" > failed.txt
+  echo "$1" >failed.txt
   while IFS= read -r line; do
     echo "      $line"
-  done < "failed.txt"
+  done <"failed.txt"
   rm failed.txt
 }
