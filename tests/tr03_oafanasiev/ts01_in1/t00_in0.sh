@@ -2,8 +2,8 @@
 
 source ../../../lib/asserts.sh
 
-IN=in0.txt
-OUT=out0.txt
+IN=in1.txt
+OUT=out1.txt
 
 EXP="$(cat -e $OUT)"
 RES="$(./$1 $IN | cat -e)"
